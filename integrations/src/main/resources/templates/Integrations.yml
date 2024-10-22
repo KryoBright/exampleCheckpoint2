@@ -1,0 +1,185 @@
+openapi: 3.0.0
+info:
+  title: Schedule API
+  version: 1.0.0
+paths: { }
+components:
+  schemas:
+    ScheduleTemplateDto:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 32
+        creationDate:
+          type: string
+          format: date-time
+    ScheduleSlotDto:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 32
+        scheduleTemplate:
+          $ref: '#/components/schemas/ScheduleTemplateDto'
+        beginTime:
+          type: string
+          format: time
+        endTime:
+          type: string
+          format: time
+    SchedulePeriodDto:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 32
+        scheduleSlot:
+          $ref: '#/components/schemas/ScheduleSlotDto'
+        schedule:
+          $ref: '#/components/schemas/ScheduleDto'
+        slotType:
+          type: string
+          maxLength: 20
+          enum:
+            - LOCAL
+            - FROM_HOME
+            - UNDEFINED
+        administrator:
+          $ref: '#/components/schemas/EmployeeDto'
+        executor:
+          $ref: '#/components/schemas/EmployeeDto'
+    SchedulePeriodsDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/SchedulePeriodDto'
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    ScheduleDto:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 32
+        scheduleName:
+          type: string
+        creationDate:
+          type: string
+          format: date-time
+    EmployeeDto:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 32
+        employeeName:
+          type: string
+        status:
+          type: string
+          maxLength: 20
+          enum:
+            - WORKING
+            - TRIAL
+            - TIME_OFF
+            - DISMISSED
+        position:
+          type: string
+          maxLength: 20
+          enum:
+            - MANAGER
+            - EMPLOYEE
+            - UNDEFINED
+            - TECH
+    SchedulePeriodFilterDto:
+      type: object
+      properties:
+        id:
+          type: string
+          maxLength: 32
+        slotId:
+          type: string
+          maxLength: 32
+        scheduleId:
+          type: string
+          maxLength: 32
+        slotType:
+          type: string
+          maxLength: 20
+          enum:
+            - LOCAL
+            - FROM_HOME
+            - UNDEFINED
+        administratorId:
+          type: string
+          maxLength: 32
+        executorId:
+          type: string
+          maxLength: 32
+        beginTime:
+          type: string
+          format: time
+        endTime:
+          type: string
+          format: time
+    SchedulePeriodSortDto:
+      type: object
+      properties:
+        field:
+          type: string
+          enum:
+            - id
+            - slotId
+            - scheduleId
+            - slotType
+            - administratorId
+            - executorId
+            - startTime
+            - endTime
+        direction:
+          type: string
+          enum:
+            - ASC
+            - DESC
+        page:
+          type: integer
+          minimum: 1
+        size:
+          type: integer
+          minimum: 1
+    SchedulePeriodRequestDto:
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/SchedulePeriodFilterDto'
+        sort:
+          $ref: '#/components/schemas/SchedulePeriodSortDto'
+    CurrencyRates:
+      type: object
+      properties:
+        disclaimer:
+          type: string
+          format: uri
+        date:
+          type: string
+          format: date
+        timestamp:
+          type: integer
+        base:
+          type: string
+        rates:
+          type: object
+          additionalProperties:
+            type: number
